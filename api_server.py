@@ -29,6 +29,31 @@ import urllib.error
 app = Flask(__name__)
 CORS(app)  # open CORS — any frontend origin can call this
 
+@app.route("/")
+def home():
+    return jsonify({
+        "application": "FacilityBrain",
+        "status": "Running",
+        "message": "Welcome to FacilityBrain API",
+        "backend": BACKEND,
+        "available_endpoints": [
+            "/api/health",
+            "/api/assets",
+            "/api/fleet",
+            "/api/recommend",
+            "/api/chat",
+            "/api/rag/search?q=health"
+        ]
+    })
+
+
+@app.route("/health")
+def render_health():
+    return jsonify({
+        "status": "healthy",
+        "message": "FacilityBrain is running successfully on Render"
+    })
+
 BACKEND = os.environ.get("BACKEND", "ollama").lower()
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
