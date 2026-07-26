@@ -60,7 +60,9 @@ OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:3b")
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
-ANTHROPIC_MODEL = "claude-sonnet-5"
+# Was hardcoded — now overridable via env so you can swap models without a
+# code change/redeploy. Falls back to the same default as before.
+ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 
 _rag_cache = None  # lazily built on first request that needs it
 
@@ -126,8 +128,19 @@ def call_llm(system_prompt, user_prompt, max_tokens=500):
         }).encode()
         req = urllib.request.Request(f"{OLLAMA_URL}/api/chat", data=payload,
                                       headers={"Content-Type": "application/json"}, method="POST")
-        with urllib.request.urlopen(req, timeout=180) as resp:
-            data = json.loads(resp.read())
+        try:
+            with urllib.request.urlopen(req, timeout=180) as resp:
+                data = json.loads(resp.read())
+        except urllib.error.URLError as e:
+            # Most common cause: BACKEND=ollama on a host (e.g. Render) that
+            # has no Ollama process running — localhost:11434 is unreachable
+            # there. Ollama only exists on your own machine unless you've
+            # deployed it separately and pointed OLLAMA_URL at it.
+            raise RuntimeError(
+                f"Could not reach Ollama at {OLLAMA_URL} ({e}). If this is running "
+                "on a cloud host (Render, etc.), Ollama isn't installed there — "
+                "set BACKEND=anthropic and ANTHROPIC_API_KEY instead."
+            ) from e
         return data.get("message", {}).get("content", "")
 
     if BACKEND == "anthropic":
@@ -141,8 +154,12 @@ def call_llm(system_prompt, user_prompt, max_tokens=500):
             "https://api.anthropic.com/v1/messages", data=payload,
             headers={"Content-Type": "application/json", "x-api-key": ANTHROPIC_API_KEY,
                      "anthropic-version": "2023-06-01"}, method="POST")
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read())
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read())
+        except urllib.error.HTTPError as e:
+            body = e.read().decode(errors="replace")
+            raise RuntimeError(f"Anthropic API error {e.code}: {body}") from e
         return "\n".join(b["text"] for b in data.get("content", []) if b.get("type") == "text")
 
     raise RuntimeError(f"Unknown BACKEND '{BACKEND}'")
