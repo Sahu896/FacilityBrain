@@ -1,0 +1,112 @@
+[
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Intro",
+    "text": "# FacilityBrain Deviation Engine PRD \u2014 Developer Reference\nScope: Deviation logic only \u2014 Health Score composite calculation is defined separately."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Dataset 1 \u2014 Live Sensor Data",
+    "text": "## Dataset 1 \u2014 Live Sensor Data"
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Temperature",
+    "text": "### Temperature\nPurpose: Tells us if an asset is running hotter or colder than it safely should \u2014 an early warning sign for cooling failure, overload, or airflow blockage.\nExpected Value: The manufacturer-rated safe operating range for that specific asset, from the Asset Register. Falls back to a rolling 30-day statistical baseline if OEM data isn't available.\nActual Value: The most recent temperature reading ingested from the BMS/SCADA/IoT sensor feed (typically every 1\u201315 minutes).\nDeviation Formula: Deviation (\u00b0C) = Actual Temperature \u2212 Expected Max Temperature. Deviation (%) = (Deviation (\u00b0C) \u00f7 Expected Max Temperature) \u00d7 100.\nIf actual_temp \u2264 expected_max_temp, deviation = 0. If no reading has arrived in the last hour, mark the asset's data as 'stale' instead of assuming 0 deviation.\nValidation: Recommended MVP Business Rule \u2014 ASHRAE gives recommended data centre temperature ranges, but converting the gap into a percentage deviation for scoring is our own normalization choice, not an industry-mandated formula."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Humidity",
+    "text": "### Humidity\nPurpose: Tells us if humidity around IT/electrical equipment is outside the safe band \u2014 too dry causes static discharge risk, too wet causes condensation and corrosion risk.\nExpected Value: The ASHRAE-recommended humidity band for data centre equipment (commonly ~40\u201360% RH).\nDeviation Formula: If Actual > Expected Max: Deviation(%) = ((Actual-Max)/Max)*100. If Actual < Expected Min: Deviation(%) = ((Min-Actual)/Min)*100. Else 0. Humidity has two 'wrong directions' (too dry AND too wet), so both sides are checked.\nValidation: Recommended MVP Business Rule, informed by ASHRAE guideline.\nBusiness Rule Required: Confirm the exact humidity band to use \u2014 ASHRAE guidance has changed across revisions and may need adjusting per data centre design (raised-floor vs. hot/cold aisle containment)."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Power Consumption",
+    "text": "### Power Consumption\nPurpose: Tells us if an asset is drawing more or less electrical power than expected \u2014 a strong early indicator of motor strain, failing components, or load imbalance.\nExpected Value: The asset's rated power consumption under normal load (nameplate at registration), or a rolling baseline from its own healthy readings over the trailing 30 days.\nDeviation Formula: Deviation(kW) = Actual \u2212 Expected. Deviation(%) = (Deviation(kW) \u00f7 Expected) \u00d7 100.\nFlag both over-consumption (>expected) and significant under-consumption as two different conditions \u2014 do not assume 'less power = healthy'.\nValidation: Recommended MVP Business Rule.\nBusiness Rule Required: Threshold for under-consumption (how low signals 'asset may not be running properly' vs. normal low-load operation) needs to be defined per asset class."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Dataset 2 \u2014 Maintenance History",
+    "text": "## Dataset 2 \u2014 Maintenance History"
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Maintenance Compliance",
+    "text": "### Maintenance Compliance\nPurpose: Tells us how well an asset's scheduled preventive maintenance (PM) has actually been kept up with \u2014 missed or late maintenance is one of the strongest predictors of unexpected failure.\nExpected Value: The scheduled maintenance date/interval defined in the CMMS for that asset.\nDeviation Formula: Days Overdue = Current Date \u2212 Scheduled Date (only if positive). Compliance Deviation (%) = 100 \u2212 [(Completed On-Time Tasks \u00f7 Total Scheduled Tasks) \u00d7 100].\nIf the asset has fewer than 2 scheduled tasks in its history, do not calculate a compliance percentage \u2014 mark as 'insufficient maintenance history'.\nValidation: Industry Standard \u2014 'PM Compliance Rate' is a widely recognised maintenance/reliability KPI used across CMMS platforms (Maximo, Fiix, UpKeep). Expressing it as a 'deviation from 100%' is our Recommended MVP Business Rule.\nBusiness Rule Required: How to treat tasks marked 'cancelled' or 'not required this cycle' by an engineer \u2014 these shouldn't count the same as a silently missed task, needs sign-off from Maintenance Ops."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Dataset 3 \u2014 Asset Age",
+    "text": "## Dataset 3 \u2014 Asset Age"
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Asset Age Deviation",
+    "text": "### Asset Age Deviation\nPurpose: Tells us how much of an asset's useful life has already been consumed \u2014 older assets closer to end-of-life carry more risk regardless of how 'healthy' they currently read on sensors.\nExpected Value: The manufacturer-stated design life for the asset (in years), captured in the Asset Register at registration.\nDeviation Formula: Life Consumed (%) = (Actual Age \u00f7 Design Life) \u00d7 100.\nIf design_life_years is missing, do not default to any assumed value \u2014 flag as 'incomplete registration data'.\nValidation: Recommended MVP Business Rule \u2014 using manufacturer design life as the denominator is standard reliability engineering practice, similar in spirit to how depreciation schedules work in finance.\nBusiness Rule Required: For usage-hour-driven assets (e.g., generators that run only during outages), should Age be measured in calendar years or run-hours against a rated run-hour life? Calendar age can significantly understate real wear for such assets."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Dataset 4 \u2014 Operational History",
+    "text": "## Dataset 4 \u2014 Operational History"
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "MTTF (Mean Time To Failure)",
+    "text": "### MTTF (Mean Time To Failure)\nPurpose: Tells us, on average, how long this asset tends to run before it fails \u2014 a lower-than-expected MTTF means the asset is failing more often than it should.\nExpected Value: The benchmark/target MTTF for this asset class \u2014 sourced from OEM reliability data where available, or FacilityBrain's own fleet-wide historical average once enough data exists.\nActual MTTF = Total Operating Hours \u00f7 Number of Failures (in the observed period, e.g., trailing 24 months).\nDeviation Formula: MTTF Deviation (%) = ((Target MTTF \u2212 Actual MTTF) \u00f7 Target MTTF) \u00d7 100. Positive means the asset is failing more often than the benchmark.\nIf failure_count = 0, do not divide by zero \u2014 treat Actual MTTF as 'at or above target' rather than leaving it undefined.\nValidation: Industry Standard \u2014 MTTF = Operating Time \u00f7 Number of Failures is a standard reliability engineering calculation, widely referenced (e.g., IEC 60300 reliability standards).\nBusiness Rule Required: Target MTTF values must be sourced per asset class \u2014 not yet defined; will need input from OEM documentation or reliability engineering benchmarks."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Incident History (Incident Frequency Deviation)",
+    "text": "### Incident History (Incident Frequency Deviation)\nPurpose: Tells us whether this asset is experiencing more failure/incident events than expected for its class \u2014 a rising incident rate is one of the clearest signs of declining reliability.\nExpected Value: The benchmark/expected incident rate for the asset class over a given period, based on OEM data or fleet-wide historical average.\nDeviation Formula: Incident Deviation (%) = ((Actual Incident Count \u2212 Expected Incident Count) \u00f7 Expected Incident Count) \u00d7 100.\nIf expected_incident_count = 0, apply a minimum floor value (e.g., 1) to avoid a division-by-zero error.\nThis metric does not distinguish severity (a minor incident counts the same as a major one) \u2014 severity weighting would be a separate, later enhancement.\nValidation: Recommended MVP Business Rule.\nBusiness Rule Required: Expected incident counts per asset class are not yet defined and need to be established from historical fleet data or OEM failure-rate data."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Runtime / Operating Hours (Utilization Deviation)",
+    "text": "### Runtime / Operating Hours (Utilization Deviation)\nPurpose: Tells us whether an asset is being run more or less than its expected duty cycle \u2014 both over-utilization (accelerated wear) and unexpected under-utilization (may indicate the asset isn't functioning as intended, or a process change) are useful signals.\nExpected Value: The asset's rated or planned operating hours for the period.\nDeviation Formula: Runtime Deviation (%) = ((Actual Operating Hours \u2212 Expected Operating Hours) \u00f7 Expected Operating Hours) \u00d7 100. Positive means it ran more than expected (potential over-utilization/wear risk); negative means under-utilization.\nIf expected_operating_hours = 0, apply a floor value rather than dividing by zero.\nValidation: Recommended MVP Business Rule.\nBusiness Rule Required: Expected/rated operating hours per asset class and per period need to be defined \u2014 will vary significantly between continuously running assets (CRAC units, chillers) and standby assets (generators, backup UPS)."
+  },
+  {
+    "source": "Deviation Engine PRD",
+    "header": "Open Business Rules \u2014 Required Before Implementation",
+    "text": "## Open Business Rules \u2014 Required Before Implementation\nHumidity band per data centre design; Power under-consumption threshold per asset class; Treatment of cancelled/not-required maintenance tasks; Calendar-age vs. run-hours for standby assets; Target MTTF values per asset class; Expected incident counts per asset class and the zero-floor value; Expected/rated operating hours per asset class and period.\nThese should be resolved with Reliability Engineering and Facilities SMEs before the Feature Engineering Service sprint begins."
+  },
+  {
+    "source": "Health Score Calculation Spec",
+    "header": "Intro",
+    "text": "# FacilityBrain Health Score Calculation Engine \u2014 Backend Implementation Reference\nScope note: Deviation calculations are already completed and approved. This document covers only the conversion of those deviation values into Health Scores. No AI/ML scoring, and no additional datasets or metrics are introduced here.\n\nApproved Dataset Weights: Live Sensor Data 40%, Maintenance History 25%, Asset Age 20%, Operational History 15%."
+  },
+  {
+    "source": "Health Score Calculation Spec",
+    "header": "Core Conversion Rule",
+    "text": "## Core Conversion Rule\nEvery metric receives an already-calculated deviation value D, normalized 0\u20131, where D=0 is baseline/fully compliant and D=1 is at or beyond the critical threshold.\nDefault conversion: Health Score = 100 \u00d7 (1 \u2212 min(D, 1)). This is a Recommended MVP Business Rule \u2014 there is no single universal industry formula for turning an arbitrary normalized deviation into a 0\u2013100 health score, so a linear inverse mapping is used for MVP simplicity and explainability.\nTwo metrics (MTTF, Asset Age) use different formulas, called out individually."
+  },
+  {
+    "source": "Health Score Calculation Spec",
+    "header": "Dataset 1 \u2014 Live Sensor Data (Weight 40%)",
+    "text": "## Dataset 1 \u2014 Live Sensor Data (Weight 40%)\nTemperature, Humidity, and Power Consumption all use HS = 100 \u00d7 (1 \u2212 min(D,1)). Validation: Recommended MVP Business Rule for each.\nDataset 1 Health Score = (HS_temp + HS_humidity + HS_power) / 3 \u2014 equal-weighted average.\nBusiness Rule Required: confirm with Product Owner whether temperature/humidity/power should carry equal weight within Dataset 1, or a custom split, before locking into production.\nIf a sensor reading is missing/stale, exclude it from the average and flag a data-quality indicator rather than defaulting it to 0 or 100."
+  },
+  {
+    "source": "Health Score Calculation Spec",
+    "header": "Dataset 2 \u2014 Maintenance History (Weight 25%)",
+    "text": "## Dataset 2 \u2014 Maintenance History (Weight 25%)\nMaintenance Compliance: HS_maint = 100 \u00d7 (1 \u2212 min(D_maint,1)). Validation: Recommended MVP Business Rule.\nDataset 2 Health Score = HS_maint (single-metric pass-through). If additional maintenance metrics are approved later, this becomes a weighted/equal average."
+  },
+  {
+    "source": "Health Score Calculation Spec",
+    "header": "Dataset 3 \u2014 Asset Age (Weight 20%)",
+    "text": "## Dataset 3 \u2014 Asset Age (Weight 20%)\nAge vs. Design Life: HS_age = 100 \u00d7 (1 \u2212 min(D_age,1)). D_age is fraction of design life consumed \u2014 a linear remaining-useful-life approximation, a widely used simplification in asset management for wear-out estimation (the middle, linear portion of the reliability \"bathtub curve\").\nValidation: Engineering Best Practice.\nDataset 3 Health Score = HS_age (single-metric pass-through)."
+  },
+  {
+    "source": "Health Score Calculation Spec",
+    "header": "Dataset 4 \u2014 Operational History (Weight 15%)",
+    "text": "## Dataset 4 \u2014 Operational History (Weight 15%)\nMTTF: uses a reliability-engineering decay curve rather than a linear one. HS_mttf = 100 \u00d7 e^(\u2212D_mttf). D_mttf is elapsed operating time since last failure/replacement normalized against the asset class's MTTF (t \u00f7 MTTF). e^(\u2212D_mttf) is the exponential reliability (survival) function R(t) = e^(\u2212t/MTTF), standard in reliability engineering under the constant-failure-rate (exponential distribution) assumption. Unlike other metrics, this is NOT a linear inversion \u2014 reliability decays exponentially, not linearly, as elapsed time approaches MTTF. No clipping needed \u2014 the exponential naturally stays within (0,100].\nValidation: Industry Best Practice / Engineering Best Practice.\nIncident History: HS_incident = 100 \u00d7 (1 \u2212 min(D_incident,1)). Validation: Recommended MVP Business Rule.\nRuntime / Operating Hours: HS_runtime = 100 \u00d7 (1 \u2212 min(D_runtime,1)). Validation: Recommended MVP Business Rule.\nDataset 4 Health Score = (HS_mttf + HS_incident + HS_runtime) / 3 \u2014 equal-weighted average.\nBusiness Rule Required: confirm with Product Owner whether MTTF/Incident/Runtime should be equally weighted within Dataset 4, or split differently, before production lock.\nSame missing-data handling as Dataset 1: if one operational metric is unavailable, exclude it from the average and raise a data-quality flag rather than defaulting to 0 or 100."
+  },
+  {
+    "source": "Health Score Calculation Spec",
+    "header": "Final Health Score",
+    "text": "## Final Health Score\nFinal_Health_Score = (0.40 \u00d7 DS1_Health) + (0.25 \u00d7 DS2_Health) + (0.20 \u00d7 DS3_Health) + (0.15 \u00d7 DS4_Health).\nCompute all four Dataset Health Scores for the current cycle first, then apply the weighted sum. This runs as the final step in the scoring pipeline, writing Final_Health_Score (rounded to nearest integer) plus the four underlying dataset scores to the asset record, so the UI can render both the headline number and the score-breakdown panel."
+  },
+  {
+    "source": "Health Score Calculation Spec",
+    "header": "Risk Category Mapping",
+    "text": "## Risk Category Mapping\n0\u201339 Critical | 40\u201359 High | 60\u201379 Medium | 80\u2013100 Healthy.\nWhy these ranges suit the MVP: these bands are already the approved thresholds used elsewhere in FacilityBrain (asset cards, dashboards, alerting). Keeping the Health Score bands identical avoids a mismatch between what the scoring engine outputs and what the UI/alerting layer already expects. A 40-point spread for Critical+High (0\u201359) reflects that data centre stakeholders want early warning well before an asset actually fails, while the narrower Healthy band (80\u2013100) keeps the bar for \"no action needed\" appropriately strict.\nValidation: Recommended MVP Business Rule (already approved and in use elsewhere in the platform)."
+  }
+]

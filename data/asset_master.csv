@@ -1,0 +1,5 @@
+Asset ID,Asset Type,Make / Model,Install Date,Design Lifespan (Years),Site / Location,Criticality Tier,Rated Capacity
+AST-1001,Chiller,Carrier 30XA-350,2019-03-15,15,Delhi DC1 - Hall A,Tier 1 - Critical,350 TR
+AST-1002,UPS,Schneider Galaxy VX 500kVA,2021-07-01,10,Delhi DC1 - Hall B,Tier 1 - Critical,500 kVA
+AST-1003,Generator,Cummins C750D5,2016-11-20,20,Delhi DC1 - Yard,Tier 2 - High,750 kVA
+AST-1004,PDU,Vertiv PDU-2200,2022-01-10,12,Delhi DC1 - Hall A,Tier 3 - Standard,200 kVA
