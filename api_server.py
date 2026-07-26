@@ -29,9 +29,11 @@ import urllib.error
 app = Flask(__name__)
 CORS(app)  # open CORS — any frontend origin can call this
 
-OLLAMA_URL = "http://localhost:11434" # "ollama" or "anthropic"
+BACKEND = os.environ.get("BACKEND", "ollama").lower()
+
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:3b")
+
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 ANTHROPIC_MODEL = "claude-sonnet-5"
 
