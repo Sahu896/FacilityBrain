@@ -1,2 +1,6 @@
 Flask
 Flask-Cors
+numpy
+pandas
+scipy
+scikit-learn
