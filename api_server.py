@@ -29,7 +29,7 @@ import urllib.error
 app = Flask(__name__)
 CORS(app)  # open CORS — any frontend origin can call this
 
-BACKEND = os.environ.get("BACKEND", "ollama").lower()  # "ollama" or "anthropic"
+OLLAMA_URL = "http://localhost:11434" # "ollama" or "anthropic"
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:3b")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
@@ -227,7 +227,11 @@ def rag_search():
 
 
 if __name__ == "__main__":
-    print(f"FacilityBrain API server — backend: {BACKEND}"
-          f" ({OLLAMA_MODEL if BACKEND == 'ollama' else ANTHROPIC_MODEL})")
+    print(
+        f"FacilityBrain API server — backend: {BACKEND}"
+        f" ({OLLAMA_MODEL if BACKEND == 'ollama' else ANTHROPIC_MODEL})"
+    )
     print("Endpoints: see API_REFERENCE.md")
-    app.run(host="0.0.0.0", port=5050, debug=False)
+
+    port = int(os.environ.get("PORT", 5050))
+    app.run(host="0.0.0.0", port=port, debug=False)
