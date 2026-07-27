@@ -1,0 +1,374 @@
+{
+  "generated_at": "2026-07-25",
+  "model_metrics": {
+    "model2_rul": {
+      "mae_days": 45.6,
+      "r2": 0.983,
+      "n_train": 333,
+      "n_test": 84
+    },
+    "model3_failure": {
+      "auc": 0.962,
+      "n_train": 299,
+      "n_test": 100
+    }
+  },
+  "assets": [
+    {
+      "asset_id": "AST-1001",
+      "asset_type": "Chiller",
+      "make_model": "Carrier 30XA-350",
+      "site_location": "Delhi DC1 - Hall A",
+      "criticality_tier": "Tier 1 - Critical",
+      "model1_anomaly_score": 93.9,
+      "model1_per_sensor": {
+        "Pressure": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 7.89,
+          "model_decision_mean": 0.0397,
+          "anomaly_score": 98.8
+        },
+        "Temperature": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 8.53,
+          "model_decision_mean": 0.0051,
+          "anomaly_score": 100.0
+        },
+        "Vibration": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 2.93,
+          "model_decision_mean": 0.049,
+          "anomaly_score": 83.0
+        }
+      },
+      "model2_rul_days": 1914,
+      "model3_failure_probability_pct": 22.7,
+      "dataset_health": {
+        "sensor": 32.8,
+        "maintenance": 55.6,
+        "age": 50.9,
+        "operational": 28.9
+      },
+      "final_health_score": 41.5,
+      "risk_category": "High",
+      "deviation_detail": {
+        "asset_id": "AST-1001",
+        "sensors": {
+          "Pressure": {
+            "actual": 7.89,
+            "expected": 6.5,
+            "deviation_pct": 21.3,
+            "D": 0.711
+          },
+          "Temperature": {
+            "actual": 8.53,
+            "expected": 7.0,
+            "deviation_pct": 21.8,
+            "D": 0.728
+          },
+          "Vibration": {
+            "actual": 2.93,
+            "expected": 2.5,
+            "deviation_pct": 17.3,
+            "D": 0.578
+          }
+        },
+        "maintenance": {
+          "compliance_pct": 55.6,
+          "D": 0.444
+        },
+        "age": {
+          "age_years": 7.36,
+          "design_life_years": "15",
+          "D": 0.491
+        },
+        "mttf": {
+          "actual_mttf_hours": 4268.0,
+          "target_mttf_hours": 15000,
+          "mttf_deviation_pct": 71.5,
+          "D": 1.0
+        },
+        "incident": {
+          "actual_incidents_12mo": 1,
+          "expected_incidents_yr": 2,
+          "D": 0.5
+        },
+        "runtime": {
+          "annualized_hours": 8529.0,
+          "rated_sustainable_hrs": 8000,
+          "D": 1.0
+        }
+      }
+    },
+    {
+      "asset_id": "AST-1002",
+      "asset_type": "UPS",
+      "make_model": "Schneider Galaxy VX 500kVA",
+      "site_location": "Delhi DC1 - Hall B",
+      "criticality_tier": "Tier 1 - Critical",
+      "model1_anomaly_score": 100.0,
+      "model1_per_sensor": {
+        "Current": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 80.35,
+          "model_decision_mean": -0.1422,
+          "anomaly_score": 100.0
+        },
+        "Humidity": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 55.71,
+          "model_decision_mean": -0.1669,
+          "anomaly_score": 100.0
+        },
+        "Temperature": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 34.35,
+          "model_decision_mean": -0.1461,
+          "anomaly_score": 100.0
+        }
+      },
+      "model2_rul_days": 1239,
+      "model3_failure_probability_pct": 26.5,
+      "dataset_health": {
+        "sensor": 22.1,
+        "maintenance": 88.9,
+        "age": 49.3,
+        "operational": 15.6
+      },
+      "final_health_score": 43.3,
+      "risk_category": "High",
+      "deviation_detail": {
+        "asset_id": "AST-1002",
+        "sensors": {
+          "Current": {
+            "actual": 80.35,
+            "expected": 65.0,
+            "deviation_pct": 23.6,
+            "D": 0.787
+          },
+          "Humidity": {
+            "actual": 55.71,
+            "expected": 45.0,
+            "deviation_pct": 23.8,
+            "D": 0.794
+          },
+          "Temperature": {
+            "actual": 34.35,
+            "expected": 28.0,
+            "deviation_pct": 22.7,
+            "D": 0.756
+          }
+        },
+        "maintenance": {
+          "compliance_pct": 88.9,
+          "D": 0.111
+        },
+        "age": {
+          "age_years": 5.07,
+          "design_life_years": "10",
+          "D": 0.507
+        },
+        "mttf": {
+          "actual_mttf_hours": 8803.0,
+          "target_mttf_hours": 20000,
+          "mttf_deviation_pct": 56.0,
+          "D": 0.757
+        },
+        "incident": {
+          "actual_incidents_12mo": 2,
+          "expected_incidents_yr": 1,
+          "D": 1.0
+        },
+        "runtime": {
+          "annualized_hours": 8760.0,
+          "rated_sustainable_hrs": 8760,
+          "D": 1.0
+        }
+      }
+    },
+    {
+      "asset_id": "AST-1003",
+      "asset_type": "Generator",
+      "make_model": "Cummins C750D5",
+      "site_location": "Delhi DC1 - Yard",
+      "criticality_tier": "Tier 2 - High",
+      "model1_anomaly_score": 94.2,
+      "model1_per_sensor": {
+        "Current": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 74.97,
+          "model_decision_mean": -0.0187,
+          "anomaly_score": 100.0
+        },
+        "Temperature": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 116.09,
+          "model_decision_mean": -0.0456,
+          "anomaly_score": 100.0
+        },
+        "Vibration": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 4.06,
+          "model_decision_mean": 0.0364,
+          "anomaly_score": 82.6
+        }
+      },
+      "model2_rul_days": 678,
+      "model3_failure_probability_pct": 10.2,
+      "dataset_health": {
+        "sensor": 0.0,
+        "maintenance": 55.6,
+        "age": 51.6,
+        "operational": 25.2
+      },
+      "final_health_score": 28.0,
+      "risk_category": "Critical",
+      "deviation_detail": {
+        "asset_id": "AST-1003",
+        "sensors": {
+          "Current": {
+            "actual": 74.97,
+            "expected": 55.0,
+            "deviation_pct": 36.3,
+            "D": 1.0
+          },
+          "Temperature": {
+            "actual": 116.09,
+            "expected": 85.0,
+            "deviation_pct": 36.6,
+            "D": 1.0
+          },
+          "Vibration": {
+            "actual": 4.06,
+            "expected": 3.0,
+            "deviation_pct": 35.4,
+            "D": 1.0
+          }
+        },
+        "maintenance": {
+          "compliance_pct": 55.6,
+          "D": 0.444
+        },
+        "age": {
+          "age_years": 9.68,
+          "design_life_years": "20",
+          "D": 0.484
+        },
+        "mttf": {
+          "actual_mttf_hours": 18.0,
+          "target_mttf_hours": 3000,
+          "mttf_deviation_pct": 99.4,
+          "D": 1.0
+        },
+        "incident": {
+          "actual_incidents_12mo": 5,
+          "expected_incidents_yr": 3,
+          "D": 1.0
+        },
+        "runtime": {
+          "annualized_hours": 73.0,
+          "rated_sustainable_hrs": 120,
+          "D": 0.611
+        }
+      }
+    },
+    {
+      "asset_id": "AST-1004",
+      "asset_type": "PDU",
+      "make_model": "Vertiv PDU-2200",
+      "site_location": "Delhi DC1 - Hall A",
+      "criticality_tier": "Tier 3 - Standard",
+      "model1_anomaly_score": 87.3,
+      "model1_per_sensor": {
+        "Current": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 51.55,
+          "model_decision_mean": 0.0803,
+          "anomaly_score": 74.9
+        },
+        "Humidity": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 45.44,
+          "model_decision_mean": 0.0485,
+          "anomaly_score": 86.9
+        },
+        "Temperature": {
+          "n_train": 701,
+          "n_recent": 30,
+          "recent_mean_reading": 30.52,
+          "model_decision_mean": -0.0285,
+          "anomaly_score": 100.0
+        }
+      },
+      "model2_rul_days": 2393,
+      "model3_failure_probability_pct": 4.9,
+      "dataset_health": {
+        "sensor": 93.6,
+        "maintenance": 100.0,
+        "age": 62.2,
+        "operational": 21.0
+      },
+      "final_health_score": 78.0,
+      "risk_category": "Medium",
+      "deviation_detail": {
+        "asset_id": "AST-1004",
+        "sensors": {
+          "Current": {
+            "actual": 51.55,
+            "expected": 50.0,
+            "deviation_pct": 3.1,
+            "D": 0.103
+          },
+          "Humidity": {
+            "actual": 45.44,
+            "expected": 45.0,
+            "deviation_pct": 1.0,
+            "D": 0.033
+          },
+          "Temperature": {
+            "actual": 30.52,
+            "expected": 30.0,
+            "deviation_pct": 1.7,
+            "D": 0.057
+          }
+        },
+        "maintenance": {
+          "compliance_pct": 100.0,
+          "D": 0.0
+        },
+        "age": {
+          "age_years": 4.54,
+          "design_life_years": "12",
+          "D": 0.378
+        },
+        "mttf": {
+          "actual_mttf_hours": 17267.0,
+          "target_mttf_hours": 25000,
+          "mttf_deviation_pct": 30.9,
+          "D": 0.483
+        },
+        "incident": {
+          "actual_incidents_12mo": 1,
+          "expected_incidents_yr": 0.5,
+          "D": 1.0
+        },
+        "runtime": {
+          "annualized_hours": 8638.0,
+          "rated_sustainable_hrs": 8760,
+          "D": 0.986
+        }
+      }
+    }
+  ]
+}

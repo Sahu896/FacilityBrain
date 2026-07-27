@@ -1,0 +1,14 @@
+.executive-kpi-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+.executive-section { padding: 20px 22px; }
+.card.executive-section { border-left-width: 3px; }
+.executive-section-title { margin-bottom: 14px; }
+.executive-site-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.executive-site-tile { background: var(--bg1); border: 1px solid var(--b0); border-radius: 10px; padding: 14px 16px; }
+.executive-site-tile-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.executive-site-icon {
+  width: 24px; height: 24px; border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, currentColor 16%, transparent); flex-shrink: 0;
+}
+.executive-site-name { font-size: 12.5px; font-weight: 700; color: var(--t1); }
+.executive-site-health { font-size: 24px; font-weight: 800; }
+.executive-site-meta { font-size: 11px; color: var(--t2); margin-top: 4px; }

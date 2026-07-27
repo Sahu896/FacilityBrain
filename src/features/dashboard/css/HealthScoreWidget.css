@@ -1,0 +1,15 @@
+.health-score-card { padding: 20px 22px; }
+.card.health-score-card { border-left-width: 3px; }
+.health-score-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.health-score-icon {
+  width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; background: color-mix(in srgb, currentColor 16%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, currentColor 30%, transparent);
+}
+.health-score-header-text { min-width: 0; }
+.health-score-title { margin-top: 2px; }
+.health-score-badge {
+  margin-left: auto; font-size: 20px; font-weight: 800; padding: 4px 14px; border-radius: 999px;
+  border: 1px solid; background: color-mix(in srgb, currentColor 12%, transparent);
+  text-shadow: 0 0 10px currentColor;
+}

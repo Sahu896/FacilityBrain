@@ -1,0 +1,14 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 36px 20px;
+  gap: 10px;
+}
+.empty-state-icon--neutral { color: var(--t3); opacity: 0.6; }
+.empty-state-icon--positive { color: var(--green); opacity: 1; }
+.empty-state-icon--error { color: var(--red); opacity: 1; }
+.empty-state-title { font-size: 13px; font-weight: 700; color: var(--t1); }
+.empty-state-body { font-size: 12px; color: var(--t2); max-width: 280px; }

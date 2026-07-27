@@ -1,0 +1,10 @@
+.predicted-failures-card { padding: 20px 22px; }
+.card.predicted-failures-card { border-left-width: 3px; }
+.predicted-failures-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.predicted-failures-export-btn { width: 28px; height: 28px; }
+.predicted-failures-list { display: flex; flex-direction: column; gap: 14px; }
+.predicted-failures-row-head { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.predicted-failures-window { font-size: 12px; color: var(--t2); }
+.predicted-failures-count-btn { font-size: 12px; font-weight: 700; background: none; border: none; padding: 0; }
+.predicted-failures-track { height: 8px; border-radius: 5px; background: var(--b1); overflow: hidden; }
+.predicted-failures-fill { height: 100%; border-radius: 5px; transition: width 400ms ease; box-shadow: 0 0 8px rgba(255,255,255,.3); }

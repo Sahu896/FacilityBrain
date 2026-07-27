@@ -1,0 +1,63 @@
+.app-header { display: flex; align-items: center; gap: 16px; padding: 12px 24px; border-bottom: 1px solid var(--b0); background: var(--bg1); flex-shrink: 0; }
+.app-header-env-tag { font-size: 10px; color: var(--t3); border: 1px solid var(--b1); border-radius: 5px; padding: 2px 7px; letter-spacing: 0.4px; font-weight: 700; }
+.app-header-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+
+.app-header-titles { min-width: 0; }
+.app-header-title { font-size: 16px; font-weight: 800; color: var(--t1); letter-spacing: -0.2px; white-space: nowrap; }
+.app-header-title-accent { color: var(--cyan); text-shadow: 0 0 16px rgba(6,214,255,0.35); }
+.app-header-subtitle { font-size: 11.5px; color: var(--t2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.app-header-live {
+  display: flex; align-items: center; gap: 6px; background: var(--bg2); border: 1px solid var(--b0);
+  border-radius: 999px; padding: 5px 12px 5px 10px;
+}
+.app-header-live:has(.app-header-live-dot--on) { border-color: rgba(16,232,152,0.3); }
+.app-header-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--t3); }
+.app-header-live-dot--on { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.app-header-live-text { font-size: 11px; color: var(--t3); }
+
+.app-header-date { font-size: 11.5px; color: var(--t3); }
+.app-header-time {
+  font-size: 12.5px; color: var(--t2); font-variant-numeric: tabular-nums;
+  background: var(--bg2); border: 1px solid var(--b0); border-radius: 999px; padding: 5px 12px;
+}
+
+.app-header-menu { position: relative; }
+.app-header-icon-btn {
+  width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--b0); background: var(--bg2);
+  display: flex; align-items: center; justify-content: center; color: var(--t2); position: relative;
+}
+.app-header-icon-btn--open { background: var(--glass2); }
+.app-header-unread-badge {
+  position: absolute; top: -4px; right: -4px; min-width: 15px; height: 15px; padding: 0 3px;
+  border-radius: 999px; background: var(--red); color: #2a0a0a; font-size: 9px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; box-shadow: 0 0 6px var(--red);
+}
+
+.app-header-dropdown { position: absolute; top: 40px; right: 0; z-index: 100; box-shadow: var(--s2); overflow: hidden; }
+.app-header-dropdown--notif { width: 320px; }
+.app-header-dropdown--profile { width: 220px; padding: 8px; }
+.app-header-dropdown-title { padding: 12px 16px; border-bottom: 1px solid var(--b0); font-size: 13px; font-weight: 700; }
+.app-header-dropdown-empty { padding: 24px 16px; text-align: center; font-size: 12px; color: var(--t2); }
+.app-header-notif-list { max-height: 340px; overflow-y: auto; }
+.app-header-notif-row { padding: 10px 16px; border-bottom: 1px solid var(--b0); display: flex; gap: 10px; }
+.app-header-notif-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; background: var(--cyan); }
+.app-header-notif-dot--critical { background: var(--red); }
+.app-header-notif-dot--warning { background: var(--amber); }
+.app-header-notif-top { display: flex; align-items: center; gap: 8px; }
+.app-header-notif-asset { font-size: 12px; color: var(--t1); font-weight: 600; }
+.app-header-notif-msg { font-size: 11.5px; color: var(--t2); }
+.app-header-notif-time { font-size: 10.5px; color: var(--t3); margin-top: 2px; }
+.app-header-view-all { width: 100%; border-radius: 0; border-left: none; border-right: none; border-bottom: none; }
+
+.app-header-avatar {
+  width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer;
+  background: linear-gradient(135deg, #06D6FF, #3b82f6); color: #04141a;
+  font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 12px rgba(6,214,255,0.35);
+}
+.app-header-profile-info { padding: 8px 10px; border-bottom: 1px solid var(--b0); margin-bottom: 6px; }
+.app-header-profile-name { font-size: 12.5px; font-weight: 700; color: var(--t1); }
+.app-header-profile-email { font-size: 11px; color: var(--t2); }
+.app-header-profile-role { font-size: 10.5px; color: var(--t3); margin-top: 2px; }
+.app-header-menu-item { width: 100%; justify-content: flex-start; }

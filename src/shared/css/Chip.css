@@ -1,0 +1,5 @@
+.chip--custom.active {
+  color: var(--chip-c);
+  border-color: var(--chip-c);
+  background: var(--chip-bg);
+}

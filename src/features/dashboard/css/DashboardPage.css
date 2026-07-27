@@ -1,0 +1,2 @@
+.dashboard-page { display: flex; flex-direction: column; gap: 18px; }
+.dashboard-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }

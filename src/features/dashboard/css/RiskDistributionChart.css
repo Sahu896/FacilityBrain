@@ -1,0 +1,5 @@
+.risk-distribution-card { padding: 20px 22px; }
+.card.risk-distribution-card { border-left-width: 3px; }
+.risk-distribution-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.risk-distribution-actions { display: flex; gap: 6px; }
+.risk-distribution-export-btn { width: 28px; height: 28px; }

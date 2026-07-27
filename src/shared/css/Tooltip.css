@@ -1,0 +1,21 @@
+.tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.tooltip-bubble {
+  position: fixed;
+  background: var(--bg3);
+  border: 1px solid var(--b1);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--t1);
+  box-shadow: var(--s2);
+  z-index: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+.tooltip-bubble--top { transform: translateY(-100%); }
+.tooltip-bubble--bottom { transform: translateY(0); }
+.tooltip-bubble--show { opacity: 1; }

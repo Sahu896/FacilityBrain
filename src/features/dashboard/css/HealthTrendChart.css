@@ -1,0 +1,9 @@
+.health-trend-card { padding: 20px 22px; }
+.card.health-trend-card { border-left-width: 3px; }
+.health-trend-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+.health-trend-controls { display: flex; align-items: center; gap: 10px; }
+.health-trend-range-group { display: flex; gap: 4px; }
+.health-trend-range-btn { padding: 4px 10px; font-size: 11px; }
+.health-trend-range-btn--active { background: var(--glass2); }
+.health-trend-view-btn { padding: 4px 10px; font-size: 11px; }
+.health-trend-export-btn { width: 28px; height: 28px; }

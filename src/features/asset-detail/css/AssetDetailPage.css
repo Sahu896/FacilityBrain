@@ -1,0 +1,26 @@
+.asset-detail-not-found { padding: 20px; }
+.asset-detail-back { align-self: flex-start; padding: 6px 12px; }
+.asset-detail-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+.asset-detail-name { font-size: 20px; font-weight: 800; color: var(--t1); letter-spacing: -0.2px; }
+.asset-detail-meta { font-size: 12.5px; color: var(--t2); margin-top: 4px; }
+.asset-detail-chip { margin-top: 10px; }
+.asset-detail-section { padding: 20px 22px; }
+.card.asset-detail-section { border-left-width: 3px; }
+.asset-detail-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.asset-detail-section-icon {
+  width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, currentColor 16%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, currentColor 30%, transparent); flex-shrink: 0;
+}
+.asset-detail-section-title { margin: 0; }
+.asset-detail-section-title-sm { margin: 0; }
+.asset-detail-actions { display: flex; gap: 8px; }
+
+.asset-detail-rec-loading { display: flex; flex-direction: column; gap: 8px; }
+.asset-detail-rec-hint { font-size: 11.5px; color: var(--t3); margin-top: 4px; }
+.asset-detail-rec-error { font-size: 12.5px; color: var(--red); }
+.asset-detail-rec-body { display: flex; flex-direction: column; gap: 14px; }
+.asset-detail-rec-text { font-size: 13px; color: var(--t1); line-height: 1.6; margin: 0; white-space: pre-wrap; }
+.asset-detail-rec-citations { border-top: 1px solid var(--b0); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.asset-detail-rec-citations-title { font-size: 11px; color: var(--t2); font-weight: 600; letter-spacing: 0.3px; }
+.asset-detail-rec-citation { font-size: 11.5px; color: var(--t3); }

@@ -1,0 +1,35 @@
+.login-page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg0);
+}
+.login-card {
+  width: 380px;
+  max-width: 92vw;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login-card svg { margin-bottom: 16px; }
+.login-title { font-size: 20px; font-weight: 800; color: var(--t1); letter-spacing: -0.2px; }
+.login-subtitle { font-size: 12.5px; color: var(--t2); margin-top: 6px; margin-bottom: 24px; text-align: center; }
+.login-form { width: 100%; display: flex; flex-direction: column; gap: 14px; }
+.login-field { display: flex; flex-direction: column; gap: 6px; }
+.login-label { font-size: 11.5px; color: var(--t2); font-weight: 600; }
+.login-input {
+  background: var(--bg1);
+  border: 1px solid var(--b1);
+  border-radius: 9px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--t1);
+  outline: none;
+}
+.login-input:focus { border-color: var(--cyan); }
+.login-error { padding: 10px 14px; background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); border-radius: 10px; display: flex; align-items: center; gap: 10px; }
+.login-error-text { font-size: 12.5px; color: var(--t1); }
+.login-submit { width: 100%; margin-top: 4px; padding: 10px; }
+.login-footnote { font-size: 11px; color: var(--t3); margin-top: 20px; text-align: center; }

@@ -1,0 +1,20 @@
+.dtable-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.dtable-search { display: flex; align-items: center; gap: 8px; background: var(--bg1); border: 1px solid var(--b1); border-radius: 9px; padding: 7px 12px; min-width: 220px; }
+.dtable-search-input { background: none; border: none; outline: none; color: var(--t1); font-size: 12.5px; width: 100%; }
+.dtable-count { margin-left: auto; font-size: 11.5px; color: var(--t3); }
+
+.dtable-error { padding: 10px 14px; background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); border-radius: 10px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.dtable-error-text { font-size: 12.5px; color: var(--t1); }
+.dtable-error-retry { margin-left: auto; padding: 5px 12px; }
+
+.dtable-wrap { overflow-x: auto; }
+.dtable-th-inner { display: inline-flex; align-items: center; gap: 3px; }
+.dtable-sort-icon { opacity: 0.35; color: var(--t3); }
+.dtable-sort-icon--active { opacity: 1; color: var(--cyan); }
+.dtable-sort-icon--asc { transform: rotate(180deg); }
+.dtable-skeleton-cell { padding: 16px 14px; }
+.dtable-row--clickable { cursor: pointer; }
+
+.dtable-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+.dtable-page-btn { padding: 5px 10px; }
+.dtable-page-label { font-size: 11.5px; color: var(--t2); padding: 0 6px; }

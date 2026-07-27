@@ -1,0 +1,11 @@
+.actions-page-card { padding: 20px 22px; }
+.actions-page-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.actions-page-header-icon {
+  width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  color: var(--cyan); background: color-mix(in srgb, var(--cyan) 16%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--cyan) 30%, transparent); flex-shrink: 0;
+}
+.actions-page-action-text { font-size: 12px; }
+.actions-page-row-actions { display: flex; gap: 4px; }
+.actions-page-action-btn { width: 26px; height: 26px; }
+.actions-page-status-chips { display: flex; gap: 6px; }

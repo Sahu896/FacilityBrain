@@ -1,0 +1,4 @@
+.sparkline-svg { overflow: visible; }
+.sparkline-line { filter: drop-shadow(0 0 2px var(--spark-glow)); }
+.sparkline-marker { cursor: default; }
+.sparkline-marker--clickable { cursor: pointer; }
