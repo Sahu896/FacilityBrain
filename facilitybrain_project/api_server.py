@@ -26,7 +26,11 @@ from rag_knowledge_base import build_knowledge_base, retrieve as rag_retrieve  #
 import urllib.request
 import urllib.error
 
-app = Flask(__name__)
+# Built React UI (vite build output at the repo root) — served by this same app so
+# one Render web service hosts UI + API together on the same origin.
+UI_DIST = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "dist")
+
+app = Flask(__name__, static_folder=UI_DIST, static_url_path="")
 CORS(app)  # open CORS — any frontend origin can call this
 
 BACKEND = os.environ.get("BACKEND", "ollama").lower()  # "ollama" or "anthropic"
@@ -99,8 +103,19 @@ def call_llm(system_prompt, user_prompt, max_tokens=500):
         }).encode()
         req = urllib.request.Request(f"{OLLAMA_URL}/api/chat", data=payload,
                                       headers={"Content-Type": "application/json"}, method="POST")
-        with urllib.request.urlopen(req, timeout=180) as resp:
-            data = json.loads(resp.read())
+        try:
+            with urllib.request.urlopen(req, timeout=180) as resp:
+                data = json.loads(resp.read())
+        except urllib.error.URLError as e:
+            # Most common cause: BACKEND=ollama on a host (e.g. Render) that
+            # has no Ollama process running — localhost:11434 is unreachable
+            # there. Ollama only exists on your own machine unless you've
+            # deployed it separately and pointed OLLAMA_URL at it.
+            raise RuntimeError(
+                f"Could not reach Ollama at {OLLAMA_URL} ({e}). If this is running "
+                "on a cloud host (Render, etc.), Ollama isn't installed there — "
+                "set BACKEND=anthropic and ANTHROPIC_API_KEY instead."
+            ) from e
         return data.get("message", {}).get("content", "")
 
     if BACKEND == "anthropic":
@@ -114,8 +129,12 @@ def call_llm(system_prompt, user_prompt, max_tokens=500):
             "https://api.anthropic.com/v1/messages", data=payload,
             headers={"Content-Type": "application/json", "x-api-key": ANTHROPIC_API_KEY,
                      "anthropic-version": "2023-06-01"}, method="POST")
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read())
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read())
+        except urllib.error.HTTPError as e:
+            body = e.read().decode(errors="replace")
+            raise RuntimeError(f"Anthropic API error {e.code}: {body}") from e
         return "\n".join(b["text"] for b in data.get("content", []) if b.get("type") == "text")
 
     raise RuntimeError(f"Unknown BACKEND '{BACKEND}'")
@@ -250,8 +269,23 @@ def rag_search():
     return jsonify(results)
 
 
+# ---------------------------------------------------------------------------
+# UI (built React app) — same origin as the API, so the frontend needs no
+# VITE_API_BASE in production. Registered after the /api routes so those win.
+# ---------------------------------------------------------------------------
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_ui(path):
+    if not os.path.isdir(UI_DIST):
+        return jsonify(error="UI not built. Run: npm install && npm run build (repo root)"), 503
+    if path and os.path.exists(os.path.join(UI_DIST, path)):
+        return app.send_static_file(path)
+    return app.send_static_file("index.html")
+
+
 if __name__ == "__main__":
     print(f"FacilityBrain API server — backend: {BACKEND}"
           f" ({OLLAMA_MODEL if BACKEND == 'ollama' else ANTHROPIC_MODEL})")
     print("Endpoints: see API_REFERENCE.md")
-    app.run(host="0.0.0.0", port=5050, debug=False)
+    port = int(os.environ.get("PORT", 5050))
+    app.run(host="0.0.0.0", port=port, debug=False)
