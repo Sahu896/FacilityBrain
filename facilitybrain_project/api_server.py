@@ -38,7 +38,7 @@ OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:3b")
 # Strip whitespace/quotes that often sneak in when pasting keys into dashboard env vars.
 ANTHROPIC_API_KEY = (os.environ.get("ANTHROPIC_API_KEY") or "").strip().strip('"').strip("'") or None
-ANTHROPIC_MODEL = "claude-sonnet-5"
+ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 
 _rag_cache = None  # lazily built on first request that needs it
 
