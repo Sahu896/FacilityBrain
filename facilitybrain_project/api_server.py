@@ -300,13 +300,20 @@ def chat():
     try:
         text = call_llm(system_prompt, user_prompt, max_tokens=300)
     except Exception as e:
-        # LLM unreachable — answer extractively with the best-matching excerpt.
-        if not context:
-            return jsonify(error=str(e)), 502
-        top = context[0]
-        text = (f"(AI model unavailable — showing the most relevant excerpt instead.)\n\n"
-                f"From {top['source']} — {top['header']}:\n{top['text']}")
-        source, llm_error = "rag_fallback", str(e)
+        # LLM unreachable — answer extractively with the best-matching excerpt,
+        # or a canned reply when the question matches nothing in the PRDs.
+        if context:
+            top = context[0]
+            text = (f"(AI model unavailable — showing the most relevant excerpt instead.)\n\n"
+                    f"From {top['source']} — {top['header']}:\n{top['text']}")
+            source = "rag_fallback"
+        else:
+            text = ("I'm the FacilityBrain AI Copilot. The AI model isn't reachable right now and "
+                    "that question doesn't match anything in the project PRDs, so I can't answer "
+                    "it. Try asking about the Health Score, deviation methodology, risk "
+                    "categories, or maintenance business rules.")
+            source = "static_fallback"
+        llm_error = str(e)
 
     return jsonify(
         answer=text,
