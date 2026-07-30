@@ -36,7 +36,8 @@ CORS(app)  # open CORS — any frontend origin can call this
 BACKEND = os.environ.get("BACKEND", "ollama").lower()  # "ollama" or "anthropic"
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:3b")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+# Strip whitespace/quotes that often sneak in when pasting keys into dashboard env vars.
+ANTHROPIC_API_KEY = (os.environ.get("ANTHROPIC_API_KEY") or "").strip().strip('"').strip("'") or None
 ANTHROPIC_MODEL = "claude-sonnet-5"
 
 _rag_cache = None  # lazily built on first request that needs it
@@ -134,7 +135,12 @@ def call_llm(system_prompt, user_prompt, max_tokens=500):
                 data = json.loads(resp.read())
         except urllib.error.HTTPError as e:
             body = e.read().decode(errors="replace")
-            raise RuntimeError(f"Anthropic API error {e.code}: {body}") from e
+            hint = ""
+            if e.code == 401:
+                hint = (" — the ANTHROPIC_API_KEY this server started with was rejected. "
+                        "Fix the key in the host's environment settings (no quotes or "
+                        "spaces, starts with 'sk-ant-') and redeploy.")
+            raise RuntimeError(f"Anthropic API error {e.code}: {body}{hint}") from e
         return "\n".join(b["text"] for b in data.get("content", []) if b.get("type") == "text")
 
     raise RuntimeError(f"Unknown BACKEND '{BACKEND}'")
