@@ -146,6 +146,42 @@ def call_llm(system_prompt, user_prompt, max_tokens=500):
     raise RuntimeError(f"Unknown BACKEND '{BACKEND}'")
 
 
+NEXT_ACTION = {
+    "Critical": "schedule an emergency inspection within 24 hours",
+    "High": "schedule an inspection within the next 7 days",
+    "Medium": "review at the next planned maintenance window",
+    "Healthy": "continue routine monitoring",
+}
+
+
+def fallback_recommendation(state):
+    """Deterministic recommendation built from the model outputs already in
+    `state` — used when no LLM backend is reachable (e.g. bad API key) so the
+    recommendation feature still returns something grounded instead of an error."""
+    if state.get("asset_id") == "FLEET":
+        worst = min(state["per_asset"], key=lambda a: a["health"])
+        action = NEXT_ACTION.get(worst["risk"], NEXT_ACTION["Medium"])
+        return (
+            f"Fleet outlook: average health {state['final_health_score']} across "
+            f"{state['asset_count']} assets, with {state['critical_count']} critical and "
+            f"{state['high_risk_count']} high-risk. {worst['id']} ({worst['type']}) needs attention "
+            f"first at health {worst['health']} ({worst['risk']} risk). Fleet-average remaining "
+            f"useful life is {state['model2_rul_days']} days with a "
+            f"{state['model3_failure_probability_pct']}% average 30-day failure probability. "
+            f"Next action: {action}."
+        )
+    ds = state["dataset_health"]
+    weakest = min(ds, key=ds.get)
+    action = NEXT_ACTION.get(state["risk_category"], NEXT_ACTION["Medium"])
+    return (
+        f"{state['risk_category']} risk: {state['asset_id']} ({state['asset_type']}) has a health "
+        f"score of {state['final_health_score']}. Models estimate {state['model2_rul_days']} days "
+        f"of remaining useful life, a {state['model3_failure_probability_pct']}% 30-day failure "
+        f"probability, and an anomaly score of {state['model1_anomaly_score']}. Its weakest signal "
+        f"is {weakest} health at {ds[weakest]}. Next action: {action}."
+    )
+
+
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
@@ -227,14 +263,20 @@ def recommend():
     context_text = "\n\n---\n\n".join(f"[{c['source']} — {c['header']}]\n{c['text']}" for c in context)
     user_prompt = f"ASSET STATE:\n{json.dumps(state, indent=2)}\n\nPRD EXCERPTS:\n{context_text}"
 
+    source, llm_error = "llm", None
     try:
         text = call_llm(system_prompt, user_prompt)
     except Exception as e:
-        return jsonify(error=str(e)), 502
+        # LLM unreachable (no Ollama on host, bad/missing API key, ...) —
+        # fall back to a recommendation computed from the model outputs.
+        text = fallback_recommendation(state)
+        source, llm_error = "rule_based_fallback", str(e)
 
     return jsonify(
         asset_id=asset_id,
         recommendation=text,
+        source=source,
+        llm_error=llm_error,
         citations=[{"source": c["source"], "section": c["header"]} for c in context],
     )
 
@@ -254,13 +296,22 @@ def chat():
                       "don't cover it.")
     user_prompt = f"QUESTION: {question}\n\nPRD EXCERPTS:\n{context_text}"
 
+    source, llm_error = "llm", None
     try:
         text = call_llm(system_prompt, user_prompt, max_tokens=300)
     except Exception as e:
-        return jsonify(error=str(e)), 502
+        # LLM unreachable — answer extractively with the best-matching excerpt.
+        if not context:
+            return jsonify(error=str(e)), 502
+        top = context[0]
+        text = (f"(AI model unavailable — showing the most relevant excerpt instead.)\n\n"
+                f"From {top['source']} — {top['header']}:\n{top['text']}")
+        source, llm_error = "rag_fallback", str(e)
 
     return jsonify(
         answer=text,
+        source=source,
+        llm_error=llm_error,
         citations=[{"source": c["source"], "section": c["header"]} for c in context],
     )
 
