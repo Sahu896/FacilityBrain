@@ -45,3 +45,5 @@ export const Volume2 = (p) => <Base {...p}><polygon points="11 5 6 9 2 9 2 15 6 
 export const VolumeX = (p) => <Base {...p}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="22" y1="9" x2="16" y2="15" /><line x1="16" y1="9" x2="22" y2="15" /></Base>
 export const Clock = (p) => <Base {...p}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></Base>
 export const MapPin = (p) => <Base {...p}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></Base>
+export const Sun = (p) => <Base {...p}><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></Base>
+export const Moon = (p) => <Base {...p}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></Base>

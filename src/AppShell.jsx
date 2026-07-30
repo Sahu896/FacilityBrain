@@ -12,7 +12,7 @@ import AlertsPage from './features/alerts/components/AlertsPage'
 import './AppShell.css'
 
 const HEADER_TITLE = 'Asset Health Overview'
-const HEADER_SUBTITLE = 'Real-time health, predictive risk, and live sensor status across your portfolio.'
+const HEADER_SUBTITLE = 'Real-time health, predictive risk, and live sensor status across your Health.'
 
 function resolvePage(path) {
   if (path === '/' || path === '/dashboard') return { page: <DashboardPage />, showDate: false }

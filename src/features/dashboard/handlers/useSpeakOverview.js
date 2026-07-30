@@ -9,7 +9,7 @@ export function overviewTextFor(items) {
   const intro = `Predictive insights overview. ${items.length} asset${items.length === 1 ? '' : 's'} ranked by failure risk.`
   const lines = items.map((rec, i) => {
     const windowPhrase = rec.predictedWindow ? `, predicted within ${rec.predictedWindow}` : ''
-    return `Number ${i + 1}: ${rec.assetName} at ${rec.site}. Health score ${rec.healthScore}, ${rec.failureProbability} percent failure probability${windowPhrase}.`
+    return `Number ${i + 1}: ${rec.assetName} at ${rec.site}. Health Score ${rec.healthScore}, ${rec.failureProbability} percent failure probability${windowPhrase}.`
   })
   return [intro, ...lines].join(' ')
 }

@@ -15,10 +15,10 @@ export default function KpiCardRow() {
   return (
     <div className="kpi-row">
       <KpiCard
-        icon={HeartPulse} label="Portfolio Health" color={healthColor}
-        value={data ? data.portfolioHealthScore : undefined}
+        icon={HeartPulse} label="Health Score" color={healthColor}
+        value={data ? data.HealthHealthScore : undefined}
         subtext={data ? 'Weighted by asset criticality' : undefined}
-        tooltip="Weighted average health score across all monitored assets, weighted by criticality."
+        tooltip="Weighted average Health Score across all monitored assets, weighted by criticality."
         isLoading={isLoading} isError={isError} onRetry={refetch}
         onClick={() => navigate('/predictive')}
       />

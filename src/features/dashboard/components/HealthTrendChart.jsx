@@ -14,12 +14,12 @@ const RANGES = [7, 30, 90]
 
 export default function HealthTrendChart() {
   const [range, setRange] = useState(30)
-  const [view, setView] = useState('portfolio') // 'portfolio' | 'sites'
+  const [view, setView] = useState('Health') // 'Health' | 'sites'
   const ref = useRef(null)
   const { data: full, isLoading, isError, refetch } = useDataQuery(async () => {
     const assets = await fetchAssets()
-    const portfolioScore = Math.round(assets.reduce((s, a) => s + a.healthScore, 0) / assets.length)
-    return { rows: healthTrendSeries(90, portfolioScore, assets), sites: getSites(assets) }
+    const HealthScore = Math.round(assets.reduce((s, a) => s + a.healthScore, 0) / assets.length)
+    return { rows: healthTrendSeries(90, HealthScore, assets), sites: getSites(assets) }
   }, [])
   const data = useMemo(() => full ? full.rows.slice(-range) : [], [full, range])
   const sites = full?.sites ?? []
@@ -40,8 +40,8 @@ export default function HealthTrendChart() {
     <div className="card health-trend-card" ref={ref} style={{ borderLeftColor: 'var(--cyan)' }}>
       <div className="health-trend-header">
         <div>
-          <div className="widget-eyebrow">HEALTH SCORE TREND</div>
-          <div className="widget-title">{view === 'portfolio' ? 'Portfolio average' : 'By site'}</div>
+          <div className="widget-eyebrow">Health Score TREND</div>
+          <div className="widget-title">{view === 'Health' ? 'Health average' : 'By site'}</div>
         </div>
         <div className="health-trend-controls">
           <div className="health-trend-range-group">
@@ -49,8 +49,8 @@ export default function HealthTrendChart() {
               <button key={r} className={`btn btn-secondary health-trend-range-btn${range === r ? ' health-trend-range-btn--active' : ''}`} onClick={() => setRange(r)}>{r}d</button>
             ))}
           </div>
-          <button className="btn btn-secondary health-trend-view-btn" onClick={() => setView(v => v === 'portfolio' ? 'sites' : 'portfolio')}>
-            {view === 'portfolio' ? 'Split by site' : 'Portfolio view'}
+          <button className="btn btn-secondary health-trend-view-btn" onClick={() => setView(v => v === 'Health' ? 'sites' : 'Health')}>
+            {view === 'Health' ? 'Split by site' : 'Health view'}
           </button>
           <button className="icon-btn health-trend-export-btn" aria-label="Export CSV" title="Export as CSV" onClick={() => exportCsv(data, 'health-score-trend.csv')}>
             <Download size={13} />
@@ -64,7 +64,7 @@ export default function HealthTrendChart() {
       <ResponsiveContainer width="100%" height={220}>
         <ComposedChart data={data}>
           <defs>
-            <linearGradient id="healthTrendPortfolioGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="healthTrendHealthGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#06D6FF" stopOpacity={0.35} />
               <stop offset="100%" stopColor="#06D6FF" stopOpacity={0} />
             </linearGradient>
@@ -73,8 +73,8 @@ export default function HealthTrendChart() {
           <YAxis domain={[0, 100]} tick={{ fill: 'var(--t3)', fontSize: 10 }} axisLine={false} tickLine={false} />
           <Tooltip contentStyle={{ background: 'var(--bg3)', border: '1px solid var(--b1)', borderRadius: 8, fontSize: 11.5 }} />
           {view === 'sites' && <Legend wrapperStyle={{ fontSize: 11 }} />}
-          {view === 'portfolio' ? (
-            <Area type="monotone" dataKey="portfolio" name="Portfolio" stroke="#06D6FF" strokeWidth={2} fill="url(#healthTrendPortfolioGradient)" dot={false} />
+          {view === 'Health' ? (
+            <Area type="monotone" dataKey="Health" name="Health" stroke="#06D6FF" strokeWidth={2} fill="url(#healthTrendHealthGradient)" dot={false} />
           ) : (
             sites.map((site, i) => (
               <Line key={site} type="monotone" dataKey={site} name={site} stroke={SITE_PALETTE[i % SITE_PALETTE.length]} strokeWidth={2} dot={false} />

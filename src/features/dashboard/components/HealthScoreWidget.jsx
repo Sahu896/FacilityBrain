@@ -1,23 +1,28 @@
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { useDataQuery } from '../../../lib/useDataQuery'
-import { computeKpis, flatDatedSeries } from '../../../data/liveData'
+import { computeKpis, fetchAssetHealthHistory, fetchFleetHealthHistory } from '../../../data/liveData'
 import { riskBandColor } from '../../../lib/riskBand'
 import SkeletonBlock from '../../../shared/components/SkeletonBlock'
 import EmptyState from '../../../shared/components/EmptyState'
 import { AlertTriangle, HeartPulse } from '../../../lib/icons'
 import '../css/HealthScoreWidget.css'
 
-export default function HealthScoreWidget({ scope = 'portfolio', asset }) {
+export default function HealthScoreWidget({ scope = 'Health', asset }) {
   const { data, isLoading, isError, refetch } = useDataQuery(async () => {
     if (scope === 'asset') return { score: asset.healthScore, band: asset.band }
     const kpis = await computeKpis()
-    return { score: kpis.portfolioHealthScore, band: kpis.band, assetCount: kpis.assetCount }
+    return { score: kpis.HealthHealthScore, band: kpis.band, assetCount: kpis.assetCount }
   }, [scope, asset?.id])
+
+  const { data: history } = useDataQuery(
+    () => scope === 'asset' ? fetchAssetHealthHistory(asset.id) : fetchFleetHealthHistory(),
+    [scope, asset?.id]
+  )
 
   if (!isLoading && (isError || !data)) {
     return (
       <div className="card health-score-card">
-        <EmptyState icon={AlertTriangle} tone="error" title="Couldn't load health score"
+        <EmptyState icon={AlertTriangle} tone="error" title="Couldn't load Health Score"
           body="Couldn't reach the FacilityBrain API — is api_server.py running?"
           action={<button className="btn btn-secondary" onClick={refetch}>Retry</button>} />
       </div>
@@ -25,8 +30,8 @@ export default function HealthScoreWidget({ scope = 'portfolio', asset }) {
   }
 
   const color = data ? riskBandColor(data.band) : 'var(--cyan)'
-  const series = data ? flatDatedSeries(30, data.score) : []
-  const gradientId = `healthScoreGradient-${scope}-${asset?.id ?? 'portfolio'}`
+  const series = history ?? []
+  const gradientId = `healthScoreGradient-${scope}-${asset?.id ?? 'Health'}`
 
   return (
     <div className="card health-score-card" style={{ borderLeftColor: color }}>
@@ -34,7 +39,7 @@ export default function HealthScoreWidget({ scope = 'portfolio', asset }) {
         <span className="health-score-icon" style={{ color }}><HeartPulse size={16} /></span>
         <div className="health-score-header-text">
           <div className="widget-eyebrow">
-            {scope === 'asset' ? 'ASSET HEALTH' : 'PORTFOLIO HEALTH'} · 30-DAY TREND
+            {scope === 'asset' ? 'ASSET HEALTH' : 'Health Score'} · 30-DAY TREND
           </div>
           <div className="widget-title health-score-title">
             {scope === 'asset' ? asset?.name : `${data?.assetCount ?? '—'} assets monitored`}
@@ -57,7 +62,7 @@ export default function HealthScoreWidget({ scope = 'portfolio', asset }) {
               </linearGradient>
             </defs>
             <XAxis dataKey="t" tick={{ fill: 'var(--t3)', fontSize: 10 }} axisLine={false} tickLine={false} minTickGap={30} />
-            <YAxis domain={[0, 100]} hide />
+            <YAxis domain={['dataMin - 3', 'dataMax + 3']} hide />
             <Tooltip contentStyle={{ background: 'var(--bg3)', border: '1px solid var(--b1)', borderRadius: 8, fontSize: 11.5 }} />
             <Area type="monotone" dataKey="value" stroke={color} strokeWidth={2} fill={`url(#${gradientId})`} />
           </AreaChart>

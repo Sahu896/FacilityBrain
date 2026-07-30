@@ -4,7 +4,7 @@ import { postChat } from '../../lib/api'
 export function useCopilotChat() {
   const [open, setOpen] = useState(false)
   const [msgs, setMsgs] = useState([
-    { id: 0, role: 'ai', text: "Hi, I'm the **FacilityBrain AI Copilot**. Ask me about portfolio health, asset risk, or the deviation/health-score methodology — I'm grounded in the project's own PRDs.", ts: new Date() },
+    { id: 0, role: 'ai', text: "Hi, I'm the **FacilityBrain AI Copilot**. Ask me about Health Score, asset risk, or the deviation/health-score methodology — I'm grounded in the project's own PRDs.", ts: new Date() },
   ])
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)

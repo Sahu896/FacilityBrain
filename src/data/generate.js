@@ -202,7 +202,7 @@ export const workOrders = Array.from({ length: 46 }, (_, i) => {
 export function computeKpis() {
   const weightSum = assets.reduce((s, a) => s + a.criticalityTier, 0)
   const scoreSum = assets.reduce((s, a) => s + a.healthScore * a.criticalityTier, 0)
-  const portfolioHealthScore = Math.round(scoreSum / weightSum)
+  const HealthHealthScore = Math.round(scoreSum / weightSum)
 
   const atRisk = assets.filter(a => a.band === 'critical' || a.band === 'warning')
   const criticalCount = atRisk.filter(a => a.band === 'critical').length
@@ -214,7 +214,7 @@ export function computeKpis() {
   const overdueOrders = openOrders.filter(w => w.overdue)
 
   return {
-    portfolioHealthScore,
+    HealthHealthScore,
     atRiskCount: atRisk.length,
     criticalCount,
     warningCount,
@@ -227,7 +227,7 @@ export function computeKpis() {
 // ── Chart series ─────────────────────────────────────────────────────────
 export function healthTrendSeries(days = 90) {
   const kpis = computeKpis()
-  const portfolio = sparkline(days, kpis.portfolioHealthScore, 6)
+  const Health = sparkline(days, kpis.HealthHealthScore, 6)
   const perSite = {}
   SITES.forEach(site => {
     const siteAssets = assets.filter(a => a.site === site)
@@ -239,7 +239,7 @@ export function healthTrendSeries(days = 90) {
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   })
   return labels.map((t, i) => {
-    const row = { t, portfolio: portfolio[i] }
+    const row = { t, Health: Health[i] }
     SITES.forEach(site => { row[site] = perSite[site][i] })
     return row
   })

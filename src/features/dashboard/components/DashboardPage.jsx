@@ -15,7 +15,7 @@ export default function DashboardPage() {
     <div className="dashboard-page">
       <InfraScoreHero />
       <KpiCardRow />
-      <HealthScoreWidget scope="portfolio" />
+      <HealthScoreWidget scope="Health" />
       <LiveSensorSummaryCard />
       <div className="two-col dashboard-two-col">
         <div ref={insightsRef}>

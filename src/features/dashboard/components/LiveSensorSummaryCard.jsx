@@ -30,7 +30,7 @@ export default function LiveSensorSummaryCard() {
       <div className="live-sensor-header">
         <div>
           <div className="widget-eyebrow">LIVE SENSOR DATA</div>
-          <div className="widget-title">Portfolio sensor status</div>
+          <div className="widget-title">Health sensor status</div>
         </div>
         <span className="live-sensor-cadence">Every 15 min · IoT / SCADA / BMS</span>
       </div>

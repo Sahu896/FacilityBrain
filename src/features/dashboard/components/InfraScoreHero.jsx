@@ -28,7 +28,7 @@ export default function InfraScoreHero() {
   if (!isLoading && (isError || !data)) {
     return (
       <div className="card infra-hero-card">
-        <EmptyState icon={AlertTriangle} tone="error" title="Couldn't load portfolio score"
+        <EmptyState icon={AlertTriangle} tone="error" title="Couldn't load Health Score"
           body="Couldn't reach the FacilityBrain API — is api_server.py running?"
           action={<button className="btn btn-secondary" onClick={refetch}>Retry</button>} />
       </div>
@@ -44,8 +44,8 @@ export default function InfraScoreHero() {
       ) : (
         <>
           <div className="infra-hero-circle" style={{ '--hero-color': color }}>
-            <div className="infra-hero-score">{data.kpis.portfolioHealthScore}</div>
-            <div className="infra-hero-score-label">Portfolio Score</div>
+            <div className="infra-hero-score">{data.kpis.HealthHealthScore}</div>
+            <div className="infra-hero-score-label">Health Score</div>
           </div>
 
           <div className="infra-hero-rings">
@@ -80,7 +80,7 @@ export default function InfraScoreHero() {
                     <button
                       type="button" className="infra-hero-lollipop-row"
                       onClick={() => navigate(`/assets/${a.id}`)}
-                      aria-label={`${a.name}: health score ${a.healthScore}, ${riskBandLabel(a.band)}`}
+                      aria-label={`${a.name}: Health Score ${a.healthScore}, ${riskBandLabel(a.band)}`}
                     >
                       <span className="infra-hero-lollipop-name">{a.name}</span>
                       <span className="infra-hero-lollipop-track">

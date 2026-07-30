@@ -27,12 +27,12 @@ export default function ExecutivePage() {
     <div className="page-stack">
       <div>
         <div className="page-title">Executive View</div>
-        <div className="page-subtitle">Portfolio-level cost, risk, and ROI roll-up — no operational detail.</div>
+        <div className="page-subtitle">Health-level cost, risk, and ROI roll-up — no operational detail.</div>
       </div>
 
       <div className="executive-kpi-row">
-        <KpiCard icon={HeartPulse} label="Portfolio Health" color={data ? riskBandColor(data.band) : 'var(--t1)'}
-          value={data?.portfolioHealthScore} subtext="Weighted by criticality" tooltip="Weighted average across all monitored assets."
+        <KpiCard icon={HeartPulse} label="Health Score" color={data ? riskBandColor(data.band) : 'var(--t1)'}
+          value={data?.HealthHealthScore} subtext="Weighted by criticality" tooltip="Weighted average across all monitored assets."
           isLoading={isLoading} isError={isError} onRetry={refetch} />
         <KpiCard icon={AlertTriangle} label="Assets at Risk" color={data?.criticalCount > 0 ? 'var(--red)' : 'var(--amber)'}
           value={data?.atRiskCount} subtext={data ? `${data.criticalCount} Critical · ${data.warningCount} Warning` : undefined}

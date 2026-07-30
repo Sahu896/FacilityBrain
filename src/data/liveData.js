@@ -3,10 +3,34 @@
 // data/generate.js used to fabricate — so components didn't need to change, only the
 // data-fetching hooks that feed them. See data/generate.js for the (now-commented-out)
 // dummy generator this replaces.
-import { getAssets, getAsset, getFleet } from '../lib/api'
+import { getAssets, getAsset, getFleet, getAssetHistory, getFleetHistory } from '../lib/api'
 import { apiRiskCategoryToBand } from '../lib/riskBand'
 
 const round1 = (n) => Math.round(n * 10) / 10
+const formatDateLabel = (isoDate) => new Date(isoDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+
+const HISTORY_WINDOW_DAYS = 30
+function withinWindow(isoDate, days) {
+  const cutoff = new Date()
+  cutoff.setDate(cutoff.getDate() - days)
+  return new Date(isoDate) >= cutoff
+}
+
+// Real Health Score history (facilitybrain_project/src/backtest_health_history.py
+// recomputes the health-score pipeline per historical day from sensor_telemetry.csv) —
+// replaces the flat placeholder series below wherever a real trend is available. The API
+// returns the full backtest range; trimmed here to the widget's 30-day window.
+export async function fetchAssetHealthHistory(assetId) {
+  const { series } = await getAssetHistory(assetId)
+  return series.filter(p => withinWindow(p.date, HISTORY_WINDOW_DAYS))
+    .map(p => ({ t: formatDateLabel(p.date), value: Math.round(p.final_health_score) }))
+}
+
+export async function fetchFleetHealthHistory() {
+  const { series } = await getFleetHistory()
+  return series.filter(p => withinWindow(p.date, HISTORY_WINDOW_DAYS))
+    .map(p => ({ t: formatDateLabel(p.date), value: Math.round(p.final_health_score) }))
+}
 
 // Real Health Score weights (matches facilitybrain_project/src/health_score_engine.py's
 // WEIGHTS exactly: DS1 sensor 40%, DS2 maintenance 25%, DS3 age 20%, DS4 operational 15%).
@@ -28,7 +52,7 @@ function worstDim(dims) {
 function actionFor(band, dims) {
   const worst = worstDim(dims)
   const urgency = band === 'critical' ? 'Immediate' : band === 'warning' ? 'Schedule within 2 weeks' : 'Monitor'
-  return `${urgency}: review ${DIM_LABEL[worst]} — lowest-scoring contributor to health score`
+  return `${urgency}: review ${DIM_LABEL[worst]} — lowest-scoring contributor to Health Score`
 }
 
 // Sensor "Normal/Warning/Critical" status derived from the deviation engine's own D value
@@ -125,7 +149,7 @@ async function fetchFleetKpisUncached() {
   const fleet = await getFleet()
   const band = apiRiskCategoryToBand(fleet.risk_category)
   return {
-    portfolioHealthScore: Math.round(fleet.final_health_score),
+    HealthHealthScore: Math.round(fleet.final_health_score),
     band,
     assetCount: fleet.asset_count,
     atRiskCount: fleet.critical_count + fleet.high_risk_count,
@@ -223,11 +247,11 @@ export function flatDatedSeries(days, value) {
 
 // Fuller flat series (real date labels, constant y) for the multi-day trend chart, which
 // needs distinct x-axis labels even though there's no real historical movement to show.
-export function healthTrendSeries(days, portfolioScore, assets) {
+export function healthTrendSeries(days, HealthScore, assets) {
   const labels = recentDateLabels(days)
   const sites = getSites(assets)
   return labels.map(t => {
-    const row = { t, portfolio: portfolioScore }
+    const row = { t, Health: HealthScore }
     sites.forEach(site => {
       const siteAssets = assets.filter(a => a.site === site)
       row[site] = Math.round(siteAssets.reduce((s, a) => s + a.healthScore, 0) / siteAssets.length)

@@ -69,7 +69,7 @@ export default function Copilot() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && send(input)}
-            placeholder="Ask about your portfolio…"
+            placeholder="Ask about your Health…"
             className="copilot-input"
           />
           <button className="btn btn-primary copilot-send-btn" disabled={!input.trim()} onClick={() => send(input)} aria-label="Send">

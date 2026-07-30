@@ -1,9 +1,111 @@
 .login-page {
+  /* Always the dark palette, independent of the app's light/dark toggle
+     (--theme vars are otherwise inherited from :root, which the toggle
+     rewrites) — the login screen isn't part of the themed app shell. */
+  --bg0: #080A0D;
+  --bg1: #0D1117;
+  --bg2: #131920;
+  --bg3: #171E27;
+  --glass: rgba(255,255,255,.032);
+  --glass2: rgba(255,255,255,.055);
+  --b0: rgba(255,255,255,.05);
+  --b1: rgba(255,255,255,.09);
+  --b2: rgba(255,255,255,.14);
+  --t1: #EEF2F7;
+  --t2: #7D8A99;
+  --t3: #7A8794;
+  --t4: #232D38;
+  --s1: 0 4px 16px rgba(0,0,0,0.35);
+  --s2: 0 8px 28px rgba(0,0,0,0.5);
+  --s3: 0 24px 64px rgba(0,0,0,0.65);
+
   height: 100vh;
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg0);
+  background: linear-gradient(100deg, #05070A 0%, #05070A 42%, #051822 68%, #052430 100%);
+}
+.login-columns {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  max-width: 980px;
+  width: 100%;
+  padding: 0 48px;
+}
+/* dense glowing network mesh — masked to bloom in on the right, fading to black on the left */
+.login-page::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 800'%3E%3Cg stroke='%2306D6FF' stroke-width='1.1' fill='none' opacity='0.5'%3E%3Cline x1='70' y1='90' x2='230' y2='50'/%3E%3Cline x1='230' y1='50' x2='400' y2='130'/%3E%3Cline x1='400' y1='130' x2='560' y2='70'/%3E%3Cline x1='560' y1='70' x2='720' y2='150'/%3E%3Cline x1='70' y1='90' x2='140' y2='240'/%3E%3Cline x1='230' y1='50' x2='140' y2='240'/%3E%3Cline x1='230' y1='50' x2='320' y2='280'/%3E%3Cline x1='400' y1='130' x2='320' y2='280'/%3E%3Cline x1='400' y1='130' x2='490' y2='230'/%3E%3Cline x1='560' y1='70' x2='490' y2='230'/%3E%3Cline x1='560' y1='70' x2='660' y2='300'/%3E%3Cline x1='720' y1='150' x2='660' y2='300'/%3E%3Cline x1='140' y1='240' x2='320' y2='280'/%3E%3Cline x1='320' y1='280' x2='490' y2='230'/%3E%3Cline x1='490' y1='230' x2='660' y2='300'/%3E%3Cline x1='140' y1='240' x2='60' y2='400'/%3E%3Cline x1='320' y1='280' x2='240' y2='430'/%3E%3Cline x1='490' y1='230' x2='420' y2='390'/%3E%3Cline x1='660' y1='300' x2='590' y2='450'/%3E%3Cline x1='660' y1='300' x2='740' y2='410'/%3E%3Cline x1='60' y1='400' x2='240' y2='430'/%3E%3Cline x1='240' y1='430' x2='420' y2='390'/%3E%3Cline x1='420' y1='390' x2='590' y2='450'/%3E%3Cline x1='590' y1='450' x2='740' y2='410'/%3E%3Cline x1='240' y1='430' x2='120' y2='570'/%3E%3Cline x1='420' y1='390' x2='300' y2='610'/%3E%3Cline x1='420' y1='390' x2='470' y2='560'/%3E%3Cline x1='590' y1='450' x2='470' y2='560'/%3E%3Cline x1='590' y1='450' x2='650' y2='630'/%3E%3Cline x1='740' y1='410' x2='650' y2='630'/%3E%3Cline x1='120' y1='570' x2='300' y2='610'/%3E%3Cline x1='300' y1='610' x2='470' y2='560'/%3E%3Cline x1='470' y1='560' x2='650' y2='630'/%3E%3Cline x1='300' y1='610' x2='180' y2='740'/%3E%3Cline x1='470' y1='560' x2='370' y2='710'/%3E%3Cline x1='650' y1='630' x2='560' y2='760'/%3E%3Cline x1='180' y1='740' x2='370' y2='710'/%3E%3Cline x1='370' y1='710' x2='560' y2='760'/%3E%3Cline x1='90' y1='170' x2='185' y2='90'/%3E%3Cline x1='185' y1='90' x2='265' y2='190'/%3E%3Cline x1='265' y1='190' x2='360' y2='210'/%3E%3Cline x1='360' y1='210' x2='445' y2='170'/%3E%3Cline x1='445' y1='170' x2='525' y2='210'/%3E%3Cline x1='525' y1='210' x2='620' y2='190'/%3E%3Cline x1='620' y1='190' x2='700' y2='230'/%3E%3Cline x1='265' y1='190' x2='400' y2='130'/%3E%3Cline x1='445' y1='170' x2='560' y2='70'/%3E%3Cline x1='525' y1='210' x2='490' y2='230'/%3E%3Cline x1='620' y1='190' x2='660' y2='300'/%3E%3Cline x1='185' y1='340' x2='260' y2='360'/%3E%3Cline x1='260' y1='360' x2='340' y2='330'/%3E%3Cline x1='340' y1='330' x2='420' y2='390'/%3E%3Cline x1='340' y1='330' x2='320' y2='280'/%3E%3Cline x1='460' y1='320' x2='420' y2='390'/%3E%3Cline x1='460' y1='320' x2='490' y2='230'/%3E%3Cline x1='460' y1='320' x2='590' y2='450'/%3E%3Cline x1='545' y1='340' x2='590' y2='450'/%3E%3Cline x1='545' y1='340' x2='660' y2='300'/%3E%3Cline x1='230' y1='500' x2='300' y2='480'/%3E%3Cline x1='300' y1='480' x2='420' y2='390'/%3E%3Cline x1='300' y1='480' x2='300' y2='610'/%3E%3Cline x1='400' y1='500' x2='470' y2='560'/%3E%3Cline x1='400' y1='500' x2='420' y2='390'/%3E%3Cline x1='400' y1='500' x2='300' y2='480'/%3E%3C/g%3E%3Cg fill='%2306D6FF'%3E%3Ccircle cx='70' cy='90' r='2'/%3E%3Ccircle cx='230' cy='50' r='3.4'/%3E%3Ccircle cx='400' cy='130' r='2'/%3E%3Ccircle cx='560' cy='70' r='2.4'/%3E%3Ccircle cx='720' cy='150' r='2'/%3E%3Ccircle cx='140' cy='240' r='2'/%3E%3Ccircle cx='320' cy='280' r='2'/%3E%3Ccircle cx='490' cy='230' r='3.6'/%3E%3Ccircle cx='660' cy='300' r='2.6'/%3E%3Ccircle cx='60' cy='400' r='2'/%3E%3Ccircle cx='240' cy='430' r='2'/%3E%3Ccircle cx='420' cy='390' r='2.6'/%3E%3Ccircle cx='590' cy='450' r='2.6'/%3E%3Ccircle cx='740' cy='410' r='2'/%3E%3Ccircle cx='120' cy='570' r='2'/%3E%3Ccircle cx='300' cy='610' r='3.4'/%3E%3Ccircle cx='470' cy='560' r='2.4'/%3E%3Ccircle cx='650' cy='630' r='2.4'/%3E%3Ccircle cx='180' cy='740' r='2'/%3E%3Ccircle cx='370' cy='710' r='2'/%3E%3Ccircle cx='560' cy='760' r='2'/%3E%3Ccircle cx='90' cy='170' r='1.6'/%3E%3Ccircle cx='185' cy='90' r='1.6'/%3E%3Ccircle cx='265' cy='190' r='1.6'/%3E%3Ccircle cx='360' cy='210' r='1.6'/%3E%3Ccircle cx='445' cy='170' r='1.6'/%3E%3Ccircle cx='525' cy='210' r='2'/%3E%3Ccircle cx='620' cy='190' r='2'/%3E%3Ccircle cx='700' cy='230' r='2.2'/%3E%3Ccircle cx='185' cy='340' r='1.6'/%3E%3Ccircle cx='260' cy='360' r='1.6'/%3E%3Ccircle cx='340' cy='330' r='2'/%3E%3Ccircle cx='460' cy='320' r='2.4'/%3E%3Ccircle cx='545' cy='340' r='2'/%3E%3Ccircle cx='230' cy='500' r='1.6'/%3E%3Ccircle cx='300' cy='480' r='2'/%3E%3Ccircle cx='400' cy='500' r='2'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 560px 560px;
+  background-repeat: repeat;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  mask-image: linear-gradient(100deg, transparent 0%, transparent 34%, rgba(0,0,0,0.6) 55%, black 78%, black 100%);
+  -webkit-mask-image: linear-gradient(100deg, transparent 0%, transparent 34%, rgba(0,0,0,0.6) 55%, black 78%, black 100%);
+  pointer-events: none;
+}
+/* teal glow bloom, brightest in the top-right and bottom-right corners */
+.login-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 94% 6%, rgba(6,214,255,0.4), transparent 38%),
+    radial-gradient(circle at 96% 96%, rgba(6,214,255,0.3), transparent 42%),
+    radial-gradient(ellipse 60% 75% at 80% 50%, rgba(6,214,255,0.2), transparent 65%);
+  pointer-events: none;
+}
+
+/* half-cropped brand mark bleeding off the top-right corner of the page */
+.login-corner-logo {
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  z-index: 0;
+  opacity: 0.16;
+  filter: blur(2px) saturate(80%);
+  pointer-events: none;
+}
+.login-corner-logo svg { display: block; }
+@media (max-width: 860px) {
+  .login-corner-logo { display: none; }
+}
+
+/* ── Left: brand story panel ─────────────────────────────────────────── */
+.login-brand-panel {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  max-width: 380px;
+}
+.login-brand-content svg { filter: drop-shadow(0 0 40px rgba(6,214,255,0.4)); margin-bottom: 24px; }
+.login-brand-wordmark { font-size: 34px; font-weight: 800; letter-spacing: -0.4px; color: var(--t1); }
+.login-brand-accent { color: var(--cyan); text-shadow: 0 0 20px rgba(6,214,255,0.4); }
+.login-brand-tagline { font-size: 12px; font-weight: 600; letter-spacing: 3px; color: var(--t2); margin-top: 8px; }
+.login-brand-desc { font-size: 14.5px; line-height: 1.7; color: var(--t2); margin: 28px 0 0; max-width: 380px; }
+.login-brand-desc-accent { color: var(--cyan); font-weight: 600; }
+.login-brand-footer { margin-top: 40px; }
+.login-brand-footer-label { font-size: 10px; color: var(--t3); letter-spacing: 0.4px; }
+.login-brand-footer-name { font-size: 12.5px; font-weight: 800; color: var(--t1); letter-spacing: 0.3px; margin-top: 2px; }
+.login-brand-footer-accent { color: var(--red); }
+
+/* ── Right: floating auth card ───────────────────────────────────────── */
+.login-form-panel {
+  flex: 0 0 auto;
+}
+@keyframes loginCardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-card { animation: none; }
 }
 .login-card {
   width: 380px;
@@ -12,8 +114,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: linear-gradient(160deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)), var(--bg2);
+  backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(6,214,255,0.14);
+  box-shadow: var(--s3), inset 0 0 0 1px rgba(255,255,255,0.02), 0 0 40px rgba(6,214,255,0.06);
+  animation: loginCardIn 420ms cubic-bezier(.4,0,.2,1);
 }
-.login-card svg { margin-bottom: 16px; }
 .login-title { font-size: 20px; font-weight: 800; color: var(--t1); letter-spacing: -0.2px; }
 .login-subtitle { font-size: 12.5px; color: var(--t2); margin-top: 6px; margin-bottom: 24px; text-align: center; }
 .login-form { width: 100%; display: flex; flex-direction: column; gap: 14px; }
@@ -28,8 +134,14 @@
   color: var(--t1);
   outline: none;
 }
-.login-input:focus { border-color: var(--cyan); }
+.login-input:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(6,214,255,0.12); }
 .login-error { padding: 10px 14px; background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); border-radius: 10px; display: flex; align-items: center; gap: 10px; }
 .login-error-text { font-size: 12.5px; color: var(--t1); }
 .login-submit { width: 100%; margin-top: 4px; padding: 10px; }
 .login-footnote { font-size: 11px; color: var(--t3); margin-top: 20px; text-align: center; }
+
+@media (max-width: 860px) {
+  .login-columns { max-width: none; padding: 0 24px; }
+  .login-brand-panel { display: none; }
+  .login-form-panel { flex: 1 1 100%; display: flex; justify-content: center; }
+}

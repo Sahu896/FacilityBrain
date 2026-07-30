@@ -3,7 +3,7 @@
 // Kept here, commented out, for reference. SUGGESTIONS below are just static prompt
 // strings shown as quick-start chips — not fabricated data — so that part stays live.
 
-export const SUGGESTIONS = ['Portfolio health score', 'Which assets are at risk?', 'Failure probability by asset', 'Maintenance compliance', 'Why is MTTF exponential?']
+export const SUGGESTIONS = ['Health Health Score', 'Which assets are at risk?', 'Failure probability by asset', 'Maintenance compliance', 'Why is MTTF exponential?']
 
 /*
 import { assets, recommendations, computeKpis, riskDistributionBySite } from '../data/generate'
@@ -22,15 +22,15 @@ export function getCopilotResponse(input) {
     return `**${asset.name}** (${asset.site}) — Health Score **${asset.healthScore}** (${riskBandLabel(asset.band)}). Failure probability ${asset.failureProbability}%${asset.predictedWindow ? `, predicted within ${asset.predictedWindow}` : ''}. Recommended action: ${asset.recommendedAction}.`
   }
 
-  if (q.match(/health|score|portfolio|overall/)) {
+  if (q.match(/health|score|Health|overall/)) {
     const k = computeKpis()
-    return `Portfolio Health Score is **${k.portfolioHealthScore}**, weighted by asset criticality. ${k.atRiskCount} assets are currently at risk (${k.criticalCount} Critical, ${k.warningCount} Warning).`
+    return `Health Health Score is **${k.HealthHealthScore}**, weighted by asset criticality. ${k.atRiskCount} assets are currently at risk (${k.criticalCount} Critical, ${k.warningCount} Warning).`
   }
 
   if (q.match(/risk|critical|warning|worst/)) {
     const top = [...recommendations].slice(0, 3).map(r => `${r.assetName} (${r.failureProbability}%)`).join(', ')
     const k = computeKpis()
-    return `**${k.atRiskCount} assets** are at risk across the portfolio. Highest failure probability: ${top}. Full ranked list is on the Predictive Insights page.`
+    return `**${k.atRiskCount} assets** are at risk across the Health. Highest failure probability: ${top}. Full ranked list is on the Predictive Insights page.`
   }
 
   if (q.match(/saving|cost|roi|downtime avoided|money/)) {
@@ -48,6 +48,6 @@ export function getCopilotResponse(input) {
     return dist.map(d => `**${d.site}**: ${d.critical} Critical, ${d.warning} Warning, ${d.monitor} Monitor, ${d.healthy} Healthy`).join('\n')
   }
 
-  return "I can help with portfolio health, at-risk assets, cost savings, maintenance backlog, or a specific asset by name (e.g. \"Show me Chiller NDC-01\"). What would you like to know?"
+  return "I can help with Health Score, at-risk assets, cost savings, maintenance backlog, or a specific asset by name (e.g. \"Show me Chiller NDC-01\"). What would you like to know?"
 }
 */

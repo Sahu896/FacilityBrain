@@ -1,9 +1,10 @@
-import { Bell, Settings, LogOut } from '../../lib/icons'
+import { Bell, Settings, LogOut, Sun, Moon } from '../../lib/icons'
 import { SevBadge } from './Badge'
 import { formatRelativeTime } from '../../lib/formatters'
 import { useRouter } from '../../lib/router'
 import { useHeaderState } from '../handlers/useHeaderState'
 import { useAuth, nameFromEmail, initialsFromEmail } from '../handlers/useAuth'
+import { useTheme } from '../handlers/useTheme'
 import '../css/Header.css'
 
 // const ENVIRONMENT = 'staging' // set to 'production' to hide the environment tag
@@ -12,6 +13,7 @@ export default function Header({ showDate = false, title, subtitle }) {
   const { navigate } = useRouter()
   const { time, notifOpen, setNotifOpen, profileOpen, setProfileOpen, live, setLive, notifRef, profileRef, alerts } = useHeaderState()
   const { user, logout } = useAuth()
+  const { theme, toggleTheme } = useTheme()
 
   const recentAlerts = alerts.slice(0, 10)
   const unread = alerts.filter(a => a.status === 'new').length
@@ -50,6 +52,15 @@ export default function Header({ showDate = false, title, subtitle }) {
         <span className="app-header-time">
           {time.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
         </span>
+
+        <button
+          className="app-header-icon-btn"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
 
         <div className="app-header-menu" ref={notifRef}>
           <button

@@ -17,7 +17,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <BrandLogo size={30} />
+        <BrandLogo size={38} />
         <div className="sidebar-label">
           <div className="sidebar-brand-name">Facility<span className="sidebar-brand-accent">Brain</span></div>
           <div className="sidebar-brand-sub">PREDICTIVE MAINTENANCE</div>
