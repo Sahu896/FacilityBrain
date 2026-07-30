@@ -281,6 +281,21 @@ def recommend():
     )
 
 
+def asset_summary_lines(assets):
+    return [
+        (f"{a['asset_id']} ({a['asset_type']}, {a.get('site_location', 'unknown site')}): "
+         f"health {a['final_health_score']} ({a['risk_category']} risk), "
+         f"RUL {a['model2_rul_days']} days, 30-day failure probability "
+         f"{a['model3_failure_probability_pct']}%, anomaly score {a['model1_anomaly_score']}")
+        for a in assets
+    ]
+
+
+ASSET_QUESTION_WORDS = ("asset", "health", "risk", "status", "detail", "fleet",
+                        "score", "failure", "rul", "critical", "warning",
+                        "generator", "chiller", "ups", "pdu")
+
+
 @app.route("/api/chat", methods=["POST"])
 def chat():
     body = request.get_json(force=True, silent=True) or {}
@@ -288,21 +303,30 @@ def chat():
     if not question:
         return jsonify(error="body must include a non-empty 'question'"), 400
 
+    assets = load_combined()["assets"]
+    asset_data = "\n".join(asset_summary_lines(assets))
     chunks, vectorizer, matrix = get_rag()
     context = rag_retrieve(question, chunks, vectorizer, matrix, k=3)
     context_text = "\n\n---\n\n".join(f"[{c['source']} — {c['header']}]\n{c['text']}" for c in context)
-    system_prompt = ("Answer questions about FacilityBrain's deviation/health-score methodology using ONLY "
-                      "the given PRD excerpts. Be concise (2-3 sentences). Say plainly if the excerpts "
-                      "don't cover it.")
-    user_prompt = f"QUESTION: {question}\n\nPRD EXCERPTS:\n{context_text}"
+    system_prompt = ("You are the FacilityBrain AI Copilot. Answer using ONLY the live asset data "
+                      "and PRD excerpts given — live data for questions about assets, health, or "
+                      "risk; PRD excerpts for methodology questions. Be concise (2-4 sentences, or "
+                      "a short list for multi-asset answers). Say plainly if the given data doesn't "
+                      "cover the question.")
+    user_prompt = (f"QUESTION: {question}\n\nLIVE ASSET DATA:\n{asset_data}\n\n"
+                   f"PRD EXCERPTS:\n{context_text}")
 
     source, llm_error = "llm", None
     try:
-        text = call_llm(system_prompt, user_prompt, max_tokens=300)
+        text = call_llm(system_prompt, user_prompt, max_tokens=400)
     except Exception as e:
-        # LLM unreachable — answer extractively with the best-matching excerpt,
-        # or a canned reply when the question matches nothing in the PRDs.
-        if context:
+        # LLM unreachable — answer asset questions from the live data, methodology
+        # questions with the best-matching excerpt, anything else with a canned reply.
+        q = question.lower()
+        if any(w in q for w in ASSET_QUESTION_WORDS) or any(a["asset_id"].lower() in q for a in assets):
+            text = "(AI model unavailable — showing live asset data instead.)\n\n" + asset_data
+            source = "data_fallback"
+        elif context:
             top = context[0]
             text = (f"(AI model unavailable — showing the most relevant excerpt instead.)\n\n"
                     f"From {top['source']} — {top['header']}:\n{top['text']}")
